@@ -2,30 +2,39 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Grass;
 import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.Control.Keyboard;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class BombermanGame extends Application {
-    
+
     public static final int WIDTH = 20;
     public static final int HEIGHT = 15;
-    
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
-    private List<Entity> stillObjects = new ArrayList<>();
 
+    public static List<Entity> entities = new ArrayList<>();
+    public static List<Entity> stillObjects = new ArrayList<>();
+    private Entity bomberman;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -43,6 +52,7 @@ public class BombermanGame extends Application {
 
         // Tao scene
         Scene scene = new Scene(root);
+        stage.setTitle("NguyenTienManh");
 
         // Them scene vao stage
         stage.setScene(scene);
@@ -51,15 +61,20 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
+                scene.addEventHandler(KeyEvent.KEY_PRESSED, Keyboard::setInputKeyEvent1);
+                scene.addEventHandler(KeyEvent.KEY_RELEASED, Keyboard::setInputKeyEvent2);
+                try {
+                    update();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 render();
-                update();
             }
         };
         timer.start();
-
         createMap();
 
-        Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
     }
 
@@ -78,9 +93,10 @@ public class BombermanGame extends Application {
         }
     }
 
-    public void update() {
+    public void update() throws IOException {
         entities.forEach(Entity::update);
     }
+
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
