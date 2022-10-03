@@ -29,6 +29,9 @@ public class BombermanGame extends Application {
 
     public static final int WIDTH = 20;
     public static final int HEIGHT = 15;
+    public static int width = 0;
+    public static int height = 0;
+    public static int level = 1;
     private GraphicsContext gc;
     private Canvas canvas;
 
