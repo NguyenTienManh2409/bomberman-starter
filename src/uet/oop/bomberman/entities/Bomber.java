@@ -15,10 +15,10 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Entity {
     private int animate = 0;
-    private static int VELOCITY = 1;
+    private static final int VELOCITY = 1;
     private boolean alive = true;
     public Bomber(int x, int y, Image img) {
-        super( x, y, img);
+        super(x, y, img);
     }
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
@@ -26,7 +26,9 @@ public class Bomber extends Entity {
     @Override
     public void update() {
         calculateMove();
+        checkCollision();
     }
+
     private void calculateMove() {
         if (isAlive()) {
             animate++;
@@ -48,16 +50,36 @@ public class Bomber extends Entity {
             }
         }
     }
-    public static void setVELOCITY(int v) {
-        VELOCITY = v;
+
+    public void checkCollision() {
+        for (Entity entity : BombermanGame.stillObjects) {
+            boolean check = this.collide(entity);
+            caculateCollision(entity,check);
+        }
     }
-    public static int getVELOCITY() {
-        return VELOCITY;
+
+    public void caculateCollision(Entity other, boolean check) {
+        double _x = (x + width / 2) - (other.x + other.width / 2) - 5;
+        double _y = (y + height / 2) - (other.y + other.height / 2) + 4;
+        double intersectX = Math.abs(_x) - (width + other.width) / 2 + 4;
+        double intersectY = Math.abs(_y) - (height + other.height) / 2 + 6;
+
+        if (intersectX < 0 && intersectY < 0) {
+            if (!check) {
+                if (intersectX > intersectY && _x > 0) x -= intersectX;
+                else if (intersectX > intersectY && _x < 0) x += intersectX;
+                else if (intersectX < intersectY && _y > 0) y -= intersectY;
+                else y += intersectY;
+            }
+        }
     }
+
+    public boolean collide(Entity e) {
+        if( e instanceof Brick || e instanceof  Wall) return false;
+        return true;
+    }
+
     public boolean isAlive() {
         return alive;
-    }
-    public void setAlive(boolean alive) {
-        this.alive = alive;
     }
 }

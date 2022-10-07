@@ -10,10 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import uet.oop.bomberman.entities.Bomber;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Grass;
-import uet.oop.bomberman.entities.Wall;
+import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.Control.Keyboard;
@@ -29,8 +26,8 @@ import java.util.Objects;
 
 public class BombermanGame extends Application {
 
-    public static final int WIDTH = 20;
-    public static final int HEIGHT = 15;
+    public static final int WIDTH = 30;
+    public static final int HEIGHT = 13;
     public static int width = 0;
     public static int height = 0;
     public static int level = 1;
@@ -58,7 +55,7 @@ public class BombermanGame extends Application {
 
         // Tao scene
         Scene scene = new Scene(root);
-        stage.setTitle("NguyenTienManh");
+        stage.setTitle("Nhom 11");
 
         // Them scene vao stage
         stage.setScene(scene);
