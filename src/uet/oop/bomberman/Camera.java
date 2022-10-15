@@ -19,12 +19,6 @@ public class Camera {
         x += ((entity.getX() - x) - BombermanGame.WIDTH * Sprite.SCALED_SIZE / 2);
         if (x <= 0) x = 0;
         if (x >= (BombermanGame.WIDTH) * Sprite.SCALED_SIZE) x = (BombermanGame.WIDTH ) * Sprite.SCALED_SIZE;
-
-        //Trong game này thì toạ độ camera y không cần thiết
-//		y += ((entity.getY() - y) - Game.HEIGHT * Sprite.SCALED_SIZE / 2) * 0.5f;
-//		if (y <= 0) y = 0;
-//		if (y >= Game.HEIGHT * Sprite.SCALED_SIZE) y = Game.HEIGHT * Sprite.SCALED_SIZE;
-
     }
 
     public float getX() {

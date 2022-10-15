@@ -84,7 +84,4 @@ public class Bomber extends Entity {
         return alive;
     }
 
-    public static int getSpeed() {
-        return speed;
-    }
 }
