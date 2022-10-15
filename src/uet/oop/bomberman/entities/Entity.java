@@ -32,4 +32,13 @@ public abstract class Entity {
     public abstract void update();
 
     public abstract boolean collide(Entity e);
+
+    public double getX() {
+        return x;
+    }
+    public double getY() {
+        return y;
+    }
+
+
 }

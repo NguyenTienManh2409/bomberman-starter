@@ -15,14 +15,15 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Entity {
     private int animate = 0;
-    private static final int VELOCITY = 1;
+    private static final int speed = 1;
     private boolean alive = true;
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
     }
     public void render(GraphicsContext gc) {
-        gc.drawImage(img, x, y);
+        gc.drawImage(img, x , y);
     }
+
     @Override
     public void update() {
         calculateMove();
@@ -33,19 +34,19 @@ public class Bomber extends Entity {
         if (isAlive()) {
             animate++;
             if (Keyboard.UP) {
-                y -= VELOCITY;
+                y -= speed;
                 img = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, animate, 25).getFxImage();
             }
             if (Keyboard.DOWN) {
-                y += VELOCITY;
+                y += speed;
                 img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, animate, 25).getFxImage();
             }
             if (Keyboard.LEFT) {
-                x -= VELOCITY;
+                x -= speed;
                 img = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, animate, 25).getFxImage();
             }
             if (Keyboard.RIGHT) {
-                x += VELOCITY;
+                x += speed;
                 img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, animate, 25).getFxImage();
             }
         }
@@ -81,5 +82,9 @@ public class Bomber extends Entity {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public static int getSpeed() {
+        return speed;
     }
 }
