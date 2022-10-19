@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent;
  */
 public class Keyboard {
 
-    public static boolean UP, LEFT, RIGHT, DOWN;
+    public static boolean UP, LEFT, RIGHT, DOWN, DROP;
 
     public static void setInputKeyEvent1(javafx.scene.input.KeyEvent event) {
         if (event.getEventType() == KeyEvent.KEY_PRESSED) {
@@ -20,6 +20,8 @@ public class Keyboard {
                 DOWN = true;
             } else if (event.getCode() == KeyCode.D) {
                 RIGHT = true;
+            } else if (event.getCode() == KeyCode.SPACE) {
+                DROP = true;
             }
         }
     }
@@ -34,6 +36,8 @@ public class Keyboard {
                 DOWN = false;
             } else if (event.getCode() == KeyCode.D) {
                 RIGHT = false;
+            } else if (event.getCode() == KeyCode.SPACE) {
+                DROP = false;
             }
         }
     }

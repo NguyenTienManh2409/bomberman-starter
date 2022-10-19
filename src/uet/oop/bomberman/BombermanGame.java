@@ -26,7 +26,7 @@ import java.util.Objects;
 
 public class BombermanGame extends Application {
 
-    public static final int WIDTH = 30;
+    public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
     public static int width = 0;
     public static int height = 0;
