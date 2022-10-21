@@ -26,17 +26,18 @@ import java.util.Objects;
 
 public class BombermanGame extends Application {
 
-    public static final int WIDTH = 31;
+    public static final int WIDTH = 15;
     public static final int HEIGHT = 13;
     public static int width = 0;
     public static int height = 0;
     public static int level = 1;
     private GraphicsContext gc;
     private Canvas canvas;
+    private Camera camera;
 
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
-    private Entity bomberman;
+    private Bomber bomberman;
     private String path = "res/levels/Level1.txt";
 
     public static void main(String[] args) {
@@ -46,7 +47,7 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) throws FileNotFoundException {
         // Tao Canvas
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
+        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT );
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
@@ -56,6 +57,8 @@ public class BombermanGame extends Application {
         // Tao scene
         Scene scene = new Scene(root);
         stage.setTitle("Nhom 11");
+
+        camera = new Camera(0, 0);
 
         // Them scene vao stage
         stage.setScene(scene);
@@ -77,19 +80,21 @@ public class BombermanGame extends Application {
         timer.start();
         MapCreate.createMap(path);
 
-        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
     }
 
 
     public void update() throws IOException {
         entities.forEach(Entity::update);
+        camera.tick(Objects.requireNonNull(bomberman));
     }
-
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.translate(-camera.getX(), 0);
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
+        gc.translate(camera.getX(), 0);
     }
 }

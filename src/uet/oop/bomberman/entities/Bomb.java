@@ -20,15 +20,6 @@ public class Bomb extends Entity {
     public void update() {
     }
 
-    @Override
-    public void render(GraphicsContext gc) {
-        animate++;
-        img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, animate, 60).getFxImage();
-        int xt = (int)_x << 4;
-        int yt = (int)_y << 4;
-
-        screen.renderEntity(xt, yt , this);
-    }
 
     @Override
     public boolean collide(Entity e) {
