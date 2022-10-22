@@ -13,71 +13,59 @@ import uet.oop.bomberman.Control.Keyboard;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.*;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 
 public class Bomber extends Entity {
     private int animate = 0;
-    private List<Bomb> bombList = new ArrayList<>();
-    private static int maxBomb = 1;
-    private static final int VELOCITY = 1;
+    private static int speed = 2;
     private boolean alive = true;
-    public Bomber(int x, int y, Image img) {
+    public static List<Bomb> bombList = new ArrayList<Bomb>();
+    public static int NUMBER_OF_BOMBS = 1;
+
+    public Bomber(double x, double y, Image img) {
         super(x, y, img);
     }
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
+        for (Bomb bomb : bombList) { bomb.render(gc);}
     }
-    private GraphicsContext gc;
     @Override
     public void update() {
         calculateMove();
         checkCollision();
-        detectPlaceBomb();
+        bombUpdate();
     }
 
     private void calculateMove() {
         if (isAlive()) {
             animate++;
             if (Keyboard.UP) {
-                y -= VELOCITY;
+                y -= speed;
                 img = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, animate, 25).getFxImage();
             }
             if (Keyboard.DOWN) {
-                y += VELOCITY;
+                y += speed;
                 img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, animate, 25).getFxImage();
             }
             if (Keyboard.LEFT) {
-                x -= VELOCITY;
+                x -= speed;
                 img = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, animate, 25).getFxImage();
             }
             if (Keyboard.RIGHT) {
-                x += VELOCITY;
+                x += speed;
                 img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, animate, 25).getFxImage();
             }
+            if (Keyboard.DROP && NUMBER_OF_BOMBS != 0) {
+                createBomb();
+            }
         }
-    }
-
-    private void detectPlaceBomb() {
-        // TODO: kiểm tra xem phím điều khiển đặt bom có được gõ và giá trị _timeBetweenPutBombs, Game.getBombRate() có thỏa mãn hay không
-        // TODO:  Game.getBombRate() sẽ trả về số lượng bom có thể đặt liên tiếp tại thời điểm hiện tại
-        // TODO: _timeBetweenPutBombs dùng để ngăn chặn Bomber đặt 2 Bomb cùng tại 1 vị trí trong 1 khoảng thời gian quá ngắn
-        // TODO: nếu 3 điều kiện trên thỏa mãn thì thực hiện đặt bom bằng placeBomb()
-        // TODO: sau khi đặt, nhớ giảm số lượng Bomb Rate và reset _timeBetweenPutBombs về 0
-        if(Keyboard.DROP) {
-
-            int xt = 3;
-            int yt = 2;
-            bombList.get(0).render(gc);
-            placeBomb(xt,yt);
-
-        }
-    }
-    protected void placeBomb(int x, int y) {
-        // TODO: thực hiện tạo đối tượng bom, đặt vào vị trí (x, y)
-        Bomb b = new Bomb(x, y, img);
-        bombList.add(b);
     }
 
     public void checkCollision() {
@@ -103,8 +91,31 @@ public class Bomber extends Entity {
         }
     }
 
+    private void createBomb() {
+        double tmpX = (BombermanGame.bomberman.getX() ) / Sprite.SCALED_SIZE;
+        double tmpY = (BombermanGame.bomberman.getY() ) / Sprite.SCALED_SIZE;
+        Bomb bomb = new Bomb(tmpX, tmpY, Sprite.bomb.getFxImage());
+        bombList.add(bomb);
+        NUMBER_OF_BOMBS--;
+    }
+
+    private void bombUpdate() {
+
+        Iterator<Bomb> bombIterator = bombList.iterator();
+        while (bombIterator.hasNext()) {
+            Bomb bomb = bombIterator.next();
+            if (bomb != null) {
+                bomb.update();
+                if (bomb.isDestroyed()) {
+                    NUMBER_OF_BOMBS++;
+                    bombIterator.remove();
+                }
+            }
+        }
+    }
+
     public boolean collide(Entity e) {
-        if( e instanceof Brick || e instanceof  Wall) return false;
+        if( e instanceof Brick || e instanceof  Wall || e instanceof  Bomb ) return false;
         return true;
     }
 

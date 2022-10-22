@@ -19,25 +19,19 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class BombermanGame extends Application {
 
     public static final int WIDTH = 15;
     public static final int HEIGHT = 13;
-    public static int width = 0;
-    public static int height = 0;
-    public static int level = 1;
     private GraphicsContext gc;
     private Canvas canvas;
     private Camera camera;
 
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
-    private Bomber bomberman;
+    public static Bomber bomberman;
     private String path = "res/levels/Level1.txt";
 
     public static void main(String[] args) {
