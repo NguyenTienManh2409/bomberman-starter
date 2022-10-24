@@ -28,12 +28,14 @@ public class Bomb extends Entity {
     public void render(GraphicsContext gc) {
         img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, animate, 18).getFxImage();
         super.render(gc);
+        for(Flame flame : flameList) { flame.render(gc);}
     }
 
     @Override
     public void update() {
         animate++;
         handleBomb();
+
     }
     private void handleBomb() {
         if (!_destroyed) {
@@ -44,6 +46,7 @@ public class Bomb extends Entity {
             } else {
                 if (_timeToExplode < TIME_TO_EXPLOSION_BOMB + TIME_TO_DISAPPEAR) {
                     _exploding = true;
+                    initAndHandleFlame();
                 } else if (_timeToExplode > TIME_TO_EXPLOSION_BOMB + TIME_TO_DISAPPEAR) {
                     _timeToExplode = 0;
                     _destroyed = true;
