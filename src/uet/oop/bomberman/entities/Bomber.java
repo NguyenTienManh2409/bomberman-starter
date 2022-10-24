@@ -92,8 +92,8 @@ public class Bomber extends Entity {
     }
 
     private void createBomb() {
-        double tmpX = (BombermanGame.bomberman.getX() ) / Sprite.SCALED_SIZE;
-        double tmpY = (BombermanGame.bomberman.getY() ) / Sprite.SCALED_SIZE;
+        int tmpX = (int) ((BombermanGame.bomberman.getX() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE);
+        int tmpY = (int) ((BombermanGame.bomberman.getY() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE);
         Bomb bomb = new Bomb(tmpX, tmpY, Sprite.bomb.getFxImage());
         bombList.add(bomb);
         NUMBER_OF_BOMBS--;

@@ -7,7 +7,7 @@ import uet.oop.bomberman.entities.Entity;
 
 public class Flame extends Entity {
     int animate = 0;
-    int time = 18;
+    int time = 36;
     private String status;
 
     public Flame(double xUnit, double yUnit, Image img) {
@@ -33,7 +33,6 @@ public class Flame extends Entity {
     }
 
     private void chooseSprite() {
-        time = 30;
         switch (status) {
             case "LEFT_LAST":
                 img =

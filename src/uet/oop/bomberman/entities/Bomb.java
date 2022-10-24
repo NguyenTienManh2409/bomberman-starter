@@ -2,8 +2,8 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
-import uet.oop.bomberman.entities.FlameDirect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,19 +17,21 @@ public class Bomb extends Entity {
     public static final int TIME_TO_DISAPPEAR = 100;
     private boolean _exploding = false;
     private boolean _destroyed = false;
+    protected int x1_temp, x2_temp, y1_temp, y2_temp;
+    protected final int pixel = 1;
 
     private final List<Flame> flameList = new ArrayList<>();
 
     public List<Flame> getFlameList() {
         return flameList;
     }
-    public Bomb(double xUnit, double yUnit, Image img) {
+    public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
     public void render(GraphicsContext gc) {
-        img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, animate, 18).getFxImage();
+        img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, animate, 36).getFxImage();
         super.render(gc);
-        for(Flame flame : flameList) { flame.render(gc);}
+        for(Flame flame : flameList) {flame.render(gc);}
     }
 
     @Override
@@ -147,20 +149,48 @@ public class Bomb extends Entity {
         flameList.add(newFlame);
     }
 
-    private boolean downable(double x, double v) {
-        return true;
+    protected boolean rightable(double x_pos, double y_pos) {
+        x1_temp = (int) ((y_pos + pixel) / Sprite.SCALED_SIZE);
+        y1_temp = (int) ((x_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE);
+
+        x2_temp = (int) ((y_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE);
+        y2_temp = (int) ((x_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE);
+
+        return MapCreate.getMap()[x1_temp][y1_temp] != '0' &&
+                MapCreate.getMap()[x2_temp][y2_temp] != '0';
     }
 
-    private boolean upable(double x, double v) {
-        return true;
+    protected boolean downable(double x_pos, double y_pos) {
+        x1_temp = (int) ((y_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE);
+        y1_temp = (int) ((x_pos + pixel) / Sprite.SCALED_SIZE);
+
+        x2_temp = (int) ((y_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE);
+        y2_temp = (int) ((x_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE);
+
+        return MapCreate.getMap()[x1_temp][y1_temp] != '0' &&
+                MapCreate.getMap()[x2_temp][y2_temp] != '0';
     }
 
-    private boolean rightable(double v, double y) {
-        return true;
+    protected boolean upable(double x_pos, double y_pos) {
+        x1_temp = (int) ((y_pos - pixel) / Sprite.SCALED_SIZE);
+        y1_temp = (int) ((x_pos + pixel) / Sprite.SCALED_SIZE);
+
+        x2_temp = (int) ((y_pos - pixel) / Sprite.SCALED_SIZE);
+        y2_temp = (int) ((x_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE);
+
+        return MapCreate.getMap()[x1_temp][y1_temp] != '0' &&
+                MapCreate.getMap()[x2_temp][y2_temp] != '0';
     }
 
-    private boolean leftable(double v, double y) {
-        return true;
+    protected boolean leftable(double x_pos, double y_pos) {
+        x1_temp = (int) ((y_pos + pixel) / Sprite.SCALED_SIZE);
+        y1_temp = (int) ((x_pos - pixel) / Sprite.SCALED_SIZE);
+
+        x2_temp = (int) ((y_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE);
+        y2_temp = (int) ((x_pos - pixel) / Sprite.SCALED_SIZE);
+
+        return MapCreate.getMap()[x1_temp][y1_temp] != '0' &&
+                MapCreate.getMap()[x2_temp][y2_temp] != '0';
     }
 
     public boolean isDestroyed() {
