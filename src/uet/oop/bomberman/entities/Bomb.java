@@ -6,6 +6,7 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.FlameDirect;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Bomb extends Entity {
@@ -35,7 +36,17 @@ public class Bomb extends Entity {
     public void update() {
         animate++;
         handleBomb();
+        flameUpdate();
+    }
 
+    private void flameUpdate() {
+        Iterator<Flame> flameIterator = flameList.iterator();
+        while (flameIterator.hasNext()) {
+            Flame flame = flameIterator.next();
+            if (flame != null) {
+                flame.update();
+            }
+        }
     }
     private void handleBomb() {
         if (!_destroyed) {
@@ -44,9 +55,12 @@ public class Bomb extends Entity {
             if (_timeToExplode < TIME_TO_EXPLOSION_BOMB) {
                 _exploding = false;
             } else {
-                if (_timeToExplode < TIME_TO_EXPLOSION_BOMB + TIME_TO_DISAPPEAR) {
+                if (_timeToExplode == TIME_TO_EXPLOSION_BOMB) {
                     _exploding = true;
                     initAndHandleFlame();
+                }
+                if (_timeToExplode < TIME_TO_EXPLOSION_BOMB + TIME_TO_DISAPPEAR) {
+                    _exploding = true;
                 } else if (_timeToExplode > TIME_TO_EXPLOSION_BOMB + TIME_TO_DISAPPEAR) {
                     _timeToExplode = 0;
                     _destroyed = true;

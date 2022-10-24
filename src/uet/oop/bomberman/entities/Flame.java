@@ -7,7 +7,7 @@ import uet.oop.bomberman.entities.Entity;
 
 public class Flame extends Entity {
     int animate = 0;
-    int time = 36;
+    int time = 18;
     private String status;
 
     public Flame(double xUnit, double yUnit, Image img) {
@@ -28,16 +28,12 @@ public class Flame extends Entity {
 
     @Override
     public void update() {
-        animateFlame();
-    }
-
-    private void animateFlame() {
-        if (animate < 7500) animate++;
-        else animate = 0;
+        chooseSprite();
+        animate++;
     }
 
     private void chooseSprite() {
-        time = Bomb.TIME_TO_EXPLOSION_BOMB;
+        time = 30;
         switch (status) {
             case "LEFT_LAST":
                 img =
