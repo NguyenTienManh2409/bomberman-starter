@@ -12,6 +12,8 @@ import javafx.scene.transform.Scale;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.Collision.Collision;
 import uet.oop.bomberman.Control.Keyboard;
+import uet.oop.bomberman.entities.Enemy.Balloon;
+import uet.oop.bomberman.entities.Enemy.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.*;
 
@@ -77,10 +79,13 @@ public class Bomber extends Entity {
             img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, animate, 50).getFxImage();
         }
     }
-    public void resetBomber(){
+    public void kill() {
+        alive = false;
+    }
+    public void resetBomber() {
         img = Sprite.player_right.getFxImage();
-        this.setX(1 * Sprite.SCALED_SIZE);
-        this.setY(1 * Sprite.SCALED_SIZE);
+        this.setX(Sprite.SCALED_SIZE);
+        this.setY(Sprite.SCALED_SIZE);
         setAlive(true);
         lives--;
     }
@@ -149,8 +154,13 @@ public class Bomber extends Entity {
                         Entity cur;
                         while (itr.hasNext()) {
                             cur = itr.next();
+                            if (cur instanceof Enemy) {
+                                if (Collision.checkVaCham(cur, flame)) {
+                                    ((Enemy) cur).setAlive(false);
+                                }
+                            }
                             if (cur instanceof Bomber) {
-                                if (Collision.checkVaCham(cur, flame)) {// && bomb.isExploding()) {
+                                if (Collision.checkVaCham(cur, flame)) {
                                     ((Bomber) cur).setAlive(false);
                                 }
                             }
@@ -194,5 +204,9 @@ public class Bomber extends Entity {
 
     public boolean isDestroyed() {
         return destroyed;
+    }
+
+    public static List<Bomb> getBombList() {
+        return bombList;
     }
 }

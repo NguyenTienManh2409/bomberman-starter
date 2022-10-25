@@ -19,7 +19,7 @@ import java.util.*;
 
 public class BombermanGame extends Application {
 
-    public static final int WIDTH = 15;
+    public static final int WIDTH = 25;
     public static final int HEIGHT = 13;
     private GraphicsContext gc;
     private Canvas canvas;
@@ -62,8 +62,7 @@ public class BombermanGame extends Application {
                 scene.addEventHandler(KeyEvent.KEY_RELEASED, Keyboard::setInputKeyEvent2);
                 try {
                     update();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException | ConcurrentModificationException ignored) {
                 }
                 render();
             }
@@ -76,7 +75,7 @@ public class BombermanGame extends Application {
     }
 
 
-    public void update() throws IOException {
+    public void update() throws IOException, ConcurrentModificationException {
         entities.forEach(Entity::update);
         camera.tick(Objects.requireNonNull(bomberman));
     }
@@ -98,4 +97,7 @@ public class BombermanGame extends Application {
         return x * 100 + y;
     }
 
+    public static Set<Integer> getLayeredEntitySet() {
+        return LayeredEntity.keySet();
+    }
 }

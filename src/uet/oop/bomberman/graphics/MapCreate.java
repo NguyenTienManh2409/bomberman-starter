@@ -2,15 +2,15 @@ package uet.oop.bomberman.graphics;
 
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.Enemy.Balloon;
 
 import java.io.*;
 import java.util.Scanner;
 import java.util.Stack;
-import java.util.StringTokenizer; // The java.util.StringTokenizer class allows you to split a string into its token elements.
 
 public class MapCreate extends BombermanGame {
     private static char[][] map;
-    public static void createMap(String path) throws FileNotFoundException {
+    public static <Balloom> void createMap(String path) throws FileNotFoundException {
         FileInputStream reader = new FileInputStream(path);
         Scanner scanner = new Scanner(reader);
         int lv = scanner.nextInt();
@@ -47,6 +47,12 @@ public class MapCreate extends BombermanGame {
                         Bomber bomber = new Bomber(j, i, Sprite.player_right.getFxImage());
                         obj = new Grass(j, i, Sprite.grass.getFxImage());
                         BombermanGame.entities.add(bomber);
+                        BombermanGame.stillObjects.add(obj);
+                        break;
+                    case '1':
+                        Entity balloon = new Balloon(j, i, Sprite.balloom_left1.getFxImage());
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        BombermanGame.entities.add(balloon);
                         BombermanGame.stillObjects.add(obj);
                         break;
                     default:
