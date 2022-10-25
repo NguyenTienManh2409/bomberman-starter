@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -75,7 +76,7 @@ public class Bomb extends Entity {
         flameList.clear();
         Flame newFlame = null;
         for (int i = 0; i < Bomb.LENGTH_OF_FLAME; i++) {
-            if (!leftable(x - i * Sprite.SCALED_SIZE, y)) {
+            if (!leftable(x, y)) {
                 break;
             }
             newFlame =
@@ -93,7 +94,7 @@ public class Bomb extends Entity {
         }
 
         for (int i = 0; i < Bomb.LENGTH_OF_FLAME; i++) {
-            if (!rightable(x + i * Sprite.SCALED_SIZE, y)) {
+            if (!rightable(x, y)) {
                 break;
             }
             newFlame =
@@ -110,7 +111,7 @@ public class Bomb extends Entity {
         }
 
         for (int i = 0; i < Bomb.LENGTH_OF_FLAME; i++) {
-            if (!upable(x, y - i * Sprite.SCALED_SIZE)) {
+            if (!upable(x, y)) {
                 break;
             }
             newFlame =
@@ -127,7 +128,7 @@ public class Bomb extends Entity {
         }
 
         for (int i = 0; i < Bomb.LENGTH_OF_FLAME; i++) {
-            if (!downable(x, y + i * Sprite.SCALED_SIZE)) {
+            if (!downable(x, y)) {
                 break;
             }
             newFlame =

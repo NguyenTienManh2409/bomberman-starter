@@ -8,7 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.Collision.Collision;
 import uet.oop.bomberman.Control.Keyboard;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.*;
@@ -26,6 +28,10 @@ public class Bomber extends Entity {
     private int animate = 0;
     private static int speed = 2;
     private boolean alive = true;
+    private int lives = 3;
+    protected boolean exploding = false;
+    protected int timeToDisappear = 0;
+    protected boolean destroyed = true;
     public static List<Bomb> bombList = new ArrayList<Bomb>();
     public static int NUMBER_OF_BOMBS = 1;
 
@@ -38,6 +44,7 @@ public class Bomber extends Entity {
     }
     @Override
     public void update() {
+        afterKill();
         calculateMove();
         checkCollision();
         bombUpdate();
@@ -65,6 +72,26 @@ public class Bomber extends Entity {
             if (Keyboard.DROP && NUMBER_OF_BOMBS != 0) {
                 createBomb();
             }
+        } else {
+            animate++;
+            img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, animate, 50).getFxImage();
+        }
+    }
+    public void resetBomber(){
+        img = Sprite.player_right.getFxImage();
+        this.setX(1 * Sprite.SCALED_SIZE);
+        this.setY(1 * Sprite.SCALED_SIZE);
+        setAlive(true);
+        lives--;
+    }
+    protected void afterKill() {
+        if (!isAlive()) {
+            timeToDisappear++;
+            if (timeToDisappear < Bomb.TIME_TO_DISAPPEAR) {
+            } else {
+                timeToDisappear = 0;
+                resetBomber();
+            }
         }
     }
 
@@ -72,6 +99,13 @@ public class Bomber extends Entity {
         for (Entity entity : BombermanGame.stillObjects) {
             boolean check = this.collide(entity);
             caculateCollision(entity,check);
+        }
+
+        for (Stack<Entity> value : BombermanGame.LayeredEntity.values()) {
+            value.forEach(temp -> {
+                boolean check = this.collide(temp);
+                caculateCollision(temp,check);
+            });
         }
     }
 
@@ -100,13 +134,44 @@ public class Bomber extends Entity {
     }
 
     private void bombUpdate() {
-
+//		System.out.println(NUMBER_OF_BOMBS);
         Iterator<Bomb> bombIterator = bombList.iterator();
         while (bombIterator.hasNext()) {
             Bomb bomb = bombIterator.next();
             if (bomb != null) {
                 bomb.update();
-                if (bomb.isDestroyed()) {
+                if (!bomb.isDestroyed() && bomb.isExploding()) {
+                    for (int i = 0; i < bomb.getFlameList().size(); i++) {
+                        Flame flame = bomb.getFlameList().get(i);
+                        flame.update();
+                        //Kiểm tra và xử lí nếu flame chạm vào người chơi hoặc quái.
+                        Iterator<Entity> itr = BombermanGame.entities.iterator();
+                        Entity cur;
+                        while (itr.hasNext()) {
+                            cur = itr.next();
+                            if (cur instanceof Bomber) {
+                                if (Collision.checkVaCham(cur, flame)) {// && bomb.isExploding()) {
+                                    ((Bomber) cur).setAlive(false);
+                                }
+                            }
+                        }
+                        //Kiểm tra và xử lí nếu flame chạm vào brick không.
+                        int xFlame = (int) (flame.getX() / Sprite.SCALED_SIZE);
+                        int yFlame = (int) (flame.getY() / Sprite.SCALED_SIZE);
+                        if (BombermanGame.LayeredEntity.containsKey(BombermanGame.generateKey(xFlame, yFlame))) {
+                            Stack<Entity> tiles = BombermanGame.LayeredEntity.get(BombermanGame.generateKey(xFlame, yFlame));
+                            if (tiles.peek() instanceof Brick) {
+                                Brick brick = (Brick) tiles.peek();
+                                brick.setExploding(true);
+                                brick.update();
+                                if (brick.isDestroyed()) {
+                                    tiles.pop();
+                                }
+                            }
+                        }
+                    }
+                }
+                if (bomb.isDestroyed()) {// && NUMBER_OF_BOMBS < 1) {
                     NUMBER_OF_BOMBS++;
                     bombIterator.remove();
                 }
@@ -121,5 +186,13 @@ public class Bomber extends Entity {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
     }
 }

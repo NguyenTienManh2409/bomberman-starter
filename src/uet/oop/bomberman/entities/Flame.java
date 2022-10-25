@@ -107,6 +107,7 @@ public class Flame extends Entity {
         }
     }
 
+
     @Override
     public boolean collide(Entity e) {
         return false;

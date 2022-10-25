@@ -40,7 +40,8 @@ public class MapCreate extends BombermanGame {
                     case '*':
                         layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
                         layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
-                        BombermanGame.stillObjects.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        BombermanGame.LayeredEntity.put(BombermanGame.generateKey(j, i), layer);
+                        BombermanGame.stillObjects.add(new Grass(j, i, Sprite.grass.getFxImage()));
                         break;
                     case 'p':
                         Bomber bomber = new Bomber(j, i, Sprite.player_right.getFxImage());

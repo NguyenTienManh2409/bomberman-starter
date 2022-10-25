@@ -2,12 +2,10 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
@@ -15,8 +13,6 @@ import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.Control.Keyboard;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
@@ -31,6 +27,7 @@ public class BombermanGame extends Application {
 
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
+    public static Map<Integer, Stack<Entity>> LayeredEntity = new HashMap<>();
     public static Bomber bomberman;
     private String path = "res/levels/Level1.txt";
 
@@ -88,7 +85,17 @@ public class BombermanGame extends Application {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.translate(-camera.getX(), 0);
         stillObjects.forEach(g -> g.render(gc));
+        if (!LayeredEntity.isEmpty()) {
+            for (Integer value : LayeredEntity.keySet()) {
+                LayeredEntity.get(value).peek().render(gc);
+            }
+        }
         entities.forEach(g -> g.render(gc));
         gc.translate(camera.getX(), 0);
     }
+
+    public static int generateKey(int x, int y) {
+        return x * 100 + y;
+    }
+
 }
