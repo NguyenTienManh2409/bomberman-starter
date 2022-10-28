@@ -93,6 +93,20 @@ public class BombermanGame extends Application {
         gc.translate(camera.getX(), 0);
     }
 
+    public static Bomber getPlayer() {
+        Iterator<Entity> itr = entities.iterator();
+
+        Entity cur;
+        while (itr.hasNext()) {
+            cur = itr.next();
+
+            if (cur instanceof Bomber)
+                return (Bomber) cur;
+        }
+
+        return null;
+    }
+
     public static int generateKey(int x, int y) {
         return x * 100 + y;
     }

@@ -2,7 +2,11 @@ package uet.oop.bomberman.graphics;
 
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.*;
-import uet.oop.bomberman.entities.Enemy.Balloon;
+import uet.oop.bomberman.entities.Enemy.*;
+import uet.oop.bomberman.entities.Enemy.AI.Doll;
+import uet.oop.bomberman.entities.Enemy.AI.Kondoria;
+import uet.oop.bomberman.entities.Enemy.AI.Minvo;
+import uet.oop.bomberman.entities.Enemy.AI.Oneal;
 
 import java.io.*;
 import java.util.Scanner;
@@ -10,7 +14,7 @@ import java.util.Stack;
 
 public class MapCreate extends BombermanGame {
     private static char[][] map;
-    public static <Balloom> void createMap(String path) throws FileNotFoundException {
+    public static void createMap(String path) throws FileNotFoundException {
         FileInputStream reader = new FileInputStream(path);
         Scanner scanner = new Scanner(reader);
         int lv = scanner.nextInt();
@@ -53,6 +57,30 @@ public class MapCreate extends BombermanGame {
                         Entity balloon = new Balloon(j, i, Sprite.balloom_left1.getFxImage());
                         obj = new Grass(j, i, Sprite.grass.getFxImage());
                         BombermanGame.entities.add(balloon);
+                        BombermanGame.stillObjects.add(obj);
+                        break;
+                    case '2':
+                        Entity oneal = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        BombermanGame.entities.add(oneal);
+                        BombermanGame.stillObjects.add(obj);
+                        break;
+                    case '3':
+                        Entity doll = new Doll(j, i, Sprite.doll_left1.getFxImage());
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        BombermanGame.entities.add(doll);
+                        BombermanGame.stillObjects.add(obj);
+                        break;
+                    case '4':
+                        Entity minvo = new Minvo(j, i, Sprite.minvo_left1.getFxImage());
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        BombermanGame.entities.add(minvo);
+                        BombermanGame.stillObjects.add(obj);
+                        break;
+                    case '5':
+                        Entity kondoria = new Kondoria(j, i, Sprite.kondoria_left1.getFxImage());
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        BombermanGame.entities.add(kondoria);
                         BombermanGame.stillObjects.add(obj);
                         break;
                     default:
