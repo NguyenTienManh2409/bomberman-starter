@@ -36,7 +36,7 @@ public abstract class Menu {
         ds.setOffsetY(3.0f);
         ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
 
-        Font font = Font.loadFont("file:res/emulogic.ttf", 45);
+        Font font = Font.loadFont("file:res/emulogic.ttf", 60);
 
         text.setEffect(ds);
         text.setFont(font);
@@ -46,7 +46,7 @@ public abstract class Menu {
                 new Stop(0.0, Color.RED),
                 new Stop(1.0, Color.GOLD)));
         text.setStroke(Color.BLUEVIOLET);
-        text.setStrokeWidth(0.5);
+        text.setStrokeWidth(2.0);
 
         DropShadow shadow = new DropShadow();
         shadow.setOffsetY(5.0);
@@ -58,7 +58,7 @@ public abstract class Menu {
     protected VBox initVBox() {
         VBox vb = new VBox();
         vb.setAlignment(Pos.BOTTOM_CENTER);
-        vb.setPadding(new Insets(20));
+        vb.setPadding(new Insets(30));
         vb.setSpacing(30);
         vb.setBackground(new Background(createImage("file:res/BG.png")));
         return vb;

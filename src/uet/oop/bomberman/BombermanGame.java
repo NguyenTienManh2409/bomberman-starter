@@ -21,6 +21,9 @@ import uet.oop.bomberman.entities.item.SpeedItem;
 import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.Control.Keyboard;
+import uet.oop.bomberman.menu.AboutOption;
+import uet.oop.bomberman.menu.MainMenu;
+import uet.oop.bomberman.sound.Sound;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,6 +43,11 @@ public class BombermanGame extends Application {
     public static Bomber bomberman;
     private String path = "res/levels/Level1.txt";
 
+    private final MainMenu mainMenu = new MainMenu();
+    private final AboutOption aboutOption = new AboutOption();
+
+    private Sound sound = new Sound();
+
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -58,11 +66,19 @@ public class BombermanGame extends Application {
         Scene scene = new Scene(root);
         stage.setTitle("Nhom 11");
 
+        Scene mainMenuScene = mainMenu.create();
+        Scene aboutOptionScene = aboutOption.create();
+
         camera = new Camera(0, 0);
+
+        stage.setScene(mainMenuScene);
+        stage.show();
 
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
+
+        sound.getBgSound();
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
