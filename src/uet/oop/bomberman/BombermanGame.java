@@ -28,7 +28,7 @@ import java.util.*;
 
 public class BombermanGame extends Application {
 
-    public static final int WIDTH = 25;
+    public static final int WIDTH = 15;
     public static final int HEIGHT = 13;
     private GraphicsContext gc;
     private Canvas canvas;
@@ -93,7 +93,8 @@ public class BombermanGame extends Application {
         entities.forEach(Entity::update);
         bombUpdate();
         itemUpdate();
-        camera.tick(Objects.requireNonNull(bomberman));
+        portalUpdate();
+        camera.tick(Objects.requireNonNull(getPlayer()));
     }
 
     public void render() {
@@ -110,7 +111,6 @@ public class BombermanGame extends Application {
     }
 
     private void bombUpdate() {
- 		System.out.println(Bomber.NUMBER_OF_BOMBS);
         Iterator<Bomb> bombIterator = Bomber.bombList.iterator();
         while (bombIterator.hasNext()) {
             Bomb bomb = bombIterator.next();
@@ -170,21 +170,21 @@ public class BombermanGame extends Application {
         if (!LayeredEntity.isEmpty()) {
             for (Integer value : getLayeredEntitySet()) {
                 if (LayeredEntity.get(value).peek() instanceof FlameItem
-                        && Collision.checkCollisionWithBuffer(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
+                        && Collision.checkVaCham(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
                     Bomb.LENGTH_OF_FLAME++;
                     LayeredEntity.get(value).pop();
                     FlameItem.timeItem = 0;
                     FlameItem.isPickUp = true;
                 }
                 if (LayeredEntity.get(value).peek() instanceof SpeedItem
-                        && Collision.checkCollisionWithBuffer(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
+                        && Collision.checkVaCham(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
                     LayeredEntity.get(value).pop();
                     Bomber.setSpeed(3);
                     SpeedItem.timeItem = 0;
                     SpeedItem.isPickUp = true;
                 }
                 if (LayeredEntity.get(value).peek() instanceof BombItem
-                        && Collision.checkCollisionWithBuffer(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
+                        && Collision.checkVaCham(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
                     LayeredEntity.get(value).pop();
                     Bomber.NUMBER_OF_BOMBS++;
                     BombItem.timeItem = 0;
@@ -192,7 +192,35 @@ public class BombermanGame extends Application {
                 }
             }
         }
+    }
+    private void portalUpdate() {
+        int count_enemy = 0;
+        Iterator<Entity> itr = entities.iterator();
+        while (itr.hasNext()) {
+            Entity e = itr.next();
+            if (e instanceof Enemy) {
+                count_enemy++;
+            }
+        }
 
+        if (count_enemy == 0) {
+            boolean canNextGame = false;
+            if (!LayeredEntity.isEmpty()) {
+                for (Integer value : getLayeredEntitySet()) {
+
+                    if (LayeredEntity.get(value).peek() instanceof Portal
+                            && Collision.checkVaCham(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
+                        canNextGame = true;
+                        break;
+                    }
+                }
+            }
+            if (canNextGame) {
+                MapCreate.setGameLevel(MapCreate.getGameLevel() + 1);
+                MapCreate.clear();
+                MapCreate.initMap();
+            }
+        }
     }
 
 

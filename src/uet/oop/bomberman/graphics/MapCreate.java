@@ -53,6 +53,12 @@ public class MapCreate extends BombermanGame {
         Bomber.bombList.clear();
         map = new char[getCol()][getRow()];
     }
+
+    public static void nextMap() {
+        clear();
+        gameLevel++;
+        initMap();
+    }
     public static void createMap(int gameLevel) {
         fileLoad(gameLevel);
 
@@ -93,6 +99,12 @@ public class MapCreate extends BombermanGame {
                     case 's':
                         layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
                         layer.add(new SpeedItem(j, i, Sprite.powerup_speed.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        BombermanGame.LayeredEntity.put(BombermanGame.generateKey(j, i), layer);
+                        break;
+                    case 'x':
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new Portal(j, i, Sprite.portal.getFxImage()));
                         layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
                         BombermanGame.LayeredEntity.put(BombermanGame.generateKey(j, i), layer);
                         break;
@@ -138,7 +150,7 @@ public class MapCreate extends BombermanGame {
     public static void fileLoad(int gameLevel) {
         try {
 
-            String path = String.format("res/levels/Level%d.txt", gameLevel);
+            String path = String.format("res/levels/Level" + gameLevel + ".txt");
             FileInputStream reader = new FileInputStream(path);
             Scanner scanner = new Scanner(reader);
 
@@ -166,7 +178,7 @@ public class MapCreate extends BombermanGame {
         return gameLevel;
     }
 
-    public void setGameLevel(int gameLevel) {
+    public static void setGameLevel(int gameLevel) {
         MapCreate.gameLevel = gameLevel;
     }
 
