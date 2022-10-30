@@ -2,12 +2,14 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.Collision.Collision;
 import uet.oop.bomberman.entities.*;
@@ -77,27 +79,57 @@ public class BombermanGame extends Application {
         stage.show();
 
         // Them scene vao stage
-        stage.setScene(scene);
-        stage.show();
 
         sound.getBgSound();
+
+        final boolean[] running = {false};
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                scene.addEventHandler(KeyEvent.KEY_PRESSED, Keyboard::setInputKeyEvent1);
-                scene.addEventHandler(KeyEvent.KEY_RELEASED, Keyboard::setInputKeyEvent2);
-                scene.setOnKeyPressed(keyEvent -> {
-                    if(keyEvent.getCode() == KeyCode.SPACE && Bomber.NUMBER_OF_BOMBS != 0){
-                        createBomb();
+                mainMenuScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        if (MainMenu.PLAY) {
+                            stage.setScene(scene);
+                            stage.show();
+                            MainMenu.PLAY = false;
+                            running[0] = true;
+                        }
+                        if (MainMenu.ABOUT) {
+                            stage.setScene(aboutOptionScene);
+                            MainMenu.ABOUT = false;
+                        }
+                    }
+                });
+                aboutOptionScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        if (AboutOption.ABOUT_BACK) {
+                            stage.setScene(mainMenuScene);
+                            AboutOption.ABOUT_BACK = false;
+                            MainMenu.ABOUT = false;
+                        }
                     }
                 });
 
-                try {
-                    update();
-                } catch (IOException | ConcurrentModificationException ignored) {
+                if (running[0]) {
+                    scene.addEventHandler(KeyEvent.KEY_PRESSED, Keyboard::setInputKeyEvent1);
+                    scene.addEventHandler(KeyEvent.KEY_RELEASED, Keyboard::setInputKeyEvent2);
+                    scene.setOnKeyPressed(keyEvent -> {
+                        if(keyEvent.getCode() == KeyCode.SPACE && Bomber.NUMBER_OF_BOMBS != 0){
+                            createBomb();
+                        }
+                    });
+
+                    try {
+                        update();
+                    } catch (IOException | ConcurrentModificationException | UnsupportedAudioFileException |
+                            LineUnavailableException ignored) {
+
+                    }
+                    render();
                 }
-                render();
             }
         };
         timer.start();
@@ -107,7 +139,7 @@ public class BombermanGame extends Application {
     }
 
 
-    public void update() throws IOException, ConcurrentModificationException {
+    public void update() throws IOException, ConcurrentModificationException, UnsupportedAudioFileException, LineUnavailableException {
         entities.forEach(Entity::update);
         bombUpdate();
         itemUpdate();
@@ -128,7 +160,7 @@ public class BombermanGame extends Application {
         gc.translate(camera.getX(), 0);
     }
 
-    private void bombUpdate() {
+    private void bombUpdate() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         Iterator<Bomb> bombIterator = Bomber.bombList.iterator();
         while (bombIterator.hasNext()) {
             Bomb bomb = bombIterator.next();
@@ -145,12 +177,13 @@ public class BombermanGame extends Application {
                             cur = itr.next();
                             if (cur instanceof Enemy) {
                                 if (Collision.checkVaCham(cur, flame)) {
-                                    ((Enemy) cur).setAlive(false);
+                                    ((Enemy) cur).kill();
                                 }
                             }
                             if (cur instanceof Bomber) {
                                 if (Collision.checkVaCham(cur, flame)) {
-                                    ((Bomber) cur).setAlive(false);
+                                    ((Bomber) cur).kill();
+                                    sound.getPlayerDeadSound();
                                 }
                             }
                         }

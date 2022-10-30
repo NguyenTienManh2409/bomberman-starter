@@ -33,6 +33,7 @@ public class AboutOption extends Menu{
     public Scene create() {
 
         VBox vb = initVBox();
+        vb.setAlignment(Pos.BOTTOM_CENTER);
 
         Text backText = new Text("Back");
 
