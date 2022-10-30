@@ -3,6 +3,8 @@ package uet.oop.bomberman.entities.Enemy;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.Charactor.Bomb;
+import uet.oop.bomberman.entities.Charactor.Bomber;
 import uet.oop.bomberman.entities.Enemy.AI.AI;
 import uet.oop.bomberman.entities.Enemy.AI.AIHigh;
 
@@ -55,7 +57,7 @@ public abstract class Enemy extends Entity {
                             if (EnemyUp(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectDown(this)) {
-                                ((Bomber) entity).setAlive(false);
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -101,7 +103,7 @@ public abstract class Enemy extends Entity {
                             if (EnemyRight(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectLeft(this)) {
-                                ((Bomber) entity).setAlive(false);
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -147,7 +149,7 @@ public abstract class Enemy extends Entity {
                             if (EnemyDown(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectUp(this)) {
-                                ((Bomber) entity).setAlive(false);
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -193,7 +195,7 @@ public abstract class Enemy extends Entity {
                             if (EnemyLeft(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectRight(this)) {
-                                ((Bomber) entity).setAlive(false);
+                                ((Bomber) entity).kill();
                             }
                         }
                     }

@@ -1,7 +1,7 @@
 package uet.oop.bomberman.entities.Enemy.AI;
 
 
-import uet.oop.bomberman.entities.Bomber;
+import uet.oop.bomberman.entities.Charactor.Bomber;
 import uet.oop.bomberman.entities.Enemy.Enemy;
 
 public class AIHigh extends AI{

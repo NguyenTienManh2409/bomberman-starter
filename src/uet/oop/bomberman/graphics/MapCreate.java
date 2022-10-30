@@ -2,34 +2,59 @@ package uet.oop.bomberman.graphics;
 
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.Charactor.Bomb;
+import uet.oop.bomberman.entities.Charactor.Bomber;
 import uet.oop.bomberman.entities.Enemy.*;
 import uet.oop.bomberman.entities.Enemy.AI.Doll;
 import uet.oop.bomberman.entities.Enemy.AI.Kondoria;
 import uet.oop.bomberman.entities.Enemy.AI.Minvo;
 import uet.oop.bomberman.entities.Enemy.AI.Oneal;
+import uet.oop.bomberman.entities.item.BombItem;
+import uet.oop.bomberman.entities.item.FlameItem;
+import uet.oop.bomberman.entities.item.SpeedItem;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class MapCreate extends BombermanGame {
+    public static int gameLevel = 1;
     private static char[][] map;
-    public static void createMap(String path) throws FileNotFoundException {
-        FileInputStream reader = new FileInputStream(path);
-        Scanner scanner = new Scanner(reader);
-        int lv = scanner.nextInt();
-        int row = scanner.nextInt();
-        int col = scanner.nextInt();
+    private static int row;
+    private static int col;
 
-        map = new char[row][col];
-        scanner.nextLine();
+    public static int getCol() {
+        return col;
+    }
 
-        for (int i = 0; i < row; i++) {
-            String line = scanner.nextLine();
-            for (int j = 0; j < col; j++) {
-                map[i][j] = line.charAt(j);
-            }
-        }
+    public static int getRow() {
+        return row;
+    }
+
+    public static void initMap() {
+        BombermanGame.entities = new ArrayList<>();
+        BombermanGame.stillObjects = new ArrayList<>();
+        BombermanGame.LayeredEntity = new HashMap<>();
+        Bomber.bombList = new ArrayList<>();
+        Bomber.NUMBER_OF_BOMBS = 1;
+        Bomb.LENGTH_OF_FLAME = 1;
+        Bomber.setSpeed(2);
+
+        map = new char[getCol()][getRow()];
+        createMap(getGameLevel());
+    }
+
+    public static void clear() {
+        BombermanGame.entities.clear();
+        BombermanGame.stillObjects.clear();
+        BombermanGame.LayeredEntity.clear();
+        Bomber.bombList.clear();
+        map = new char[getCol()][getRow()];
+    }
+    public static void createMap(int gameLevel) {
+        fileLoad(gameLevel);
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -37,7 +62,7 @@ public class MapCreate extends BombermanGame {
                 Entity obj;
                 Stack<Entity> layer = new Stack<>();
                 switch (c) {
-                    case '0':
+                    case '#':
                         obj = new Wall(j, i, Sprite.wall.getFxImage());
                         BombermanGame.stillObjects.add(obj);
                         break;
@@ -52,6 +77,24 @@ public class MapCreate extends BombermanGame {
                         obj = new Grass(j, i, Sprite.grass.getFxImage());
                         BombermanGame.entities.add(bomber);
                         BombermanGame.stillObjects.add(obj);
+                        break;
+                    case 'f':
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new FlameItem(j, i, Sprite.powerup_flames.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        BombermanGame.LayeredEntity.put(BombermanGame.generateKey(j, i), layer);
+                        break;
+                    case 'b':
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new BombItem(j, i, Sprite.powerup_bombpass.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        BombermanGame.LayeredEntity.put(BombermanGame.generateKey(j, i), layer);
+                        break;
+                    case 's':
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new SpeedItem(j, i, Sprite.powerup_speed.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        BombermanGame.LayeredEntity.put(BombermanGame.generateKey(j, i), layer);
                         break;
                     case '1':
                         Entity balloon = new Balloon(j, i, Sprite.balloom_left1.getFxImage());
@@ -90,7 +133,41 @@ public class MapCreate extends BombermanGame {
                 }
             }
         }
-        scanner.close();
+    }
+
+    public static void fileLoad(int gameLevel) {
+        try {
+
+            String path = String.format("res/levels/Level%d.txt", gameLevel);
+            FileInputStream reader = new FileInputStream(path);
+            Scanner scanner = new Scanner(reader);
+
+            int lv = scanner.nextInt();
+            row = scanner.nextInt();
+            col = scanner.nextInt();
+
+            map = new char[row][col];
+            scanner.nextLine();
+
+            for (int i = 0; i < row; i++) {
+                String line = scanner.nextLine();
+                for (int j = 0; j < col; j++) {
+                    map[i][j] = line.charAt(j);
+                }
+            }
+            reader.close();
+            scanner.close();
+        } catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public static int getGameLevel() {
+        return gameLevel;
+    }
+
+    public void setGameLevel(int gameLevel) {
+        MapCreate.gameLevel = gameLevel;
     }
 
     public static char[][] getMap() {

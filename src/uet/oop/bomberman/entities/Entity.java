@@ -7,13 +7,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.io.IOException;
+
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
     protected double x;
     //Tọa độ Y tính từ góc trái trên trong Canvas
     protected double y;
-    protected double width;
-    protected double height;
+    public double width;
+    public double height;
     protected Image img;
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas

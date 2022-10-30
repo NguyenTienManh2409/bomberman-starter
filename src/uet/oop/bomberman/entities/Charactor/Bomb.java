@@ -1,8 +1,8 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.Charactor;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -157,8 +157,8 @@ public class Bomb extends Entity {
         x2_temp = (int) ((y_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE);
         y2_temp = (int) ((x_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE);
 
-        return MapCreate.getMap()[x1_temp][y1_temp] != '0' &&
-                MapCreate.getMap()[x2_temp][y2_temp] != '0';
+        return MapCreate.getMap()[x1_temp][y1_temp] != '#' &&
+                MapCreate.getMap()[x2_temp][y2_temp] != '#';
     }
 
     protected boolean downable(double x_pos, double y_pos) {
@@ -168,8 +168,8 @@ public class Bomb extends Entity {
         x2_temp = (int) ((y_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE);
         y2_temp = (int) ((x_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE);
 
-        return MapCreate.getMap()[x1_temp][y1_temp] != '0' &&
-                MapCreate.getMap()[x2_temp][y2_temp] != '0';
+        return MapCreate.getMap()[x1_temp][y1_temp] != '#' &&
+                MapCreate.getMap()[x2_temp][y2_temp] != '#';
     }
 
     protected boolean upable(double x_pos, double y_pos) {
@@ -179,8 +179,8 @@ public class Bomb extends Entity {
         x2_temp = (int) ((y_pos - pixel) / Sprite.SCALED_SIZE);
         y2_temp = (int) ((x_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE);
 
-        return MapCreate.getMap()[x1_temp][y1_temp] != '0' &&
-                MapCreate.getMap()[x2_temp][y2_temp] != '0';
+        return MapCreate.getMap()[x1_temp][y1_temp] != '#' &&
+                MapCreate.getMap()[x2_temp][y2_temp] != '#';
     }
 
     protected boolean leftable(double x_pos, double y_pos) {
@@ -190,8 +190,8 @@ public class Bomb extends Entity {
         x2_temp = (int) ((y_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE);
         y2_temp = (int) ((x_pos - pixel) / Sprite.SCALED_SIZE);
 
-        return MapCreate.getMap()[x1_temp][y1_temp] != '0' &&
-                MapCreate.getMap()[x2_temp][y2_temp] != '0';
+        return MapCreate.getMap()[x1_temp][y1_temp] != '#' &&
+                MapCreate.getMap()[x2_temp][y2_temp] != '#';
     }
 
     public boolean isDestroyed() {
