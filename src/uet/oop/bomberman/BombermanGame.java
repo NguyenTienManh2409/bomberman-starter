@@ -25,6 +25,8 @@ import uet.oop.bomberman.menu.AboutOption;
 import uet.oop.bomberman.menu.MainMenu;
 import uet.oop.bomberman.sound.Sound;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
@@ -53,7 +55,7 @@ public class BombermanGame extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT );
         gc = canvas.getGraphicsContext2D();
