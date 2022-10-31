@@ -8,6 +8,7 @@ import uet.oop.bomberman.entities.Charactor.Bomb;
 import uet.oop.bomberman.entities.Charactor.Bomber;
 import uet.oop.bomberman.entities.Enemy.AI.AI;
 import uet.oop.bomberman.entities.Enemy.AI.AIHigh;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.Stack;
 
@@ -23,6 +24,7 @@ public abstract class Enemy extends Entity {
     protected int frameToDisappear = 48;
     protected int maxStep = 90;
     private final int allowDistance = 18;
+    private Sound sound = new Sound();
 
     public Enemy(double xUnit, double yUnit, Image img) {
         super(xUnit, yUnit, img);
@@ -35,6 +37,7 @@ public abstract class Enemy extends Entity {
 
     public void kill() {
         isAlive = false;
+        sound.getEnemyDeadSound();
     }
 
     // Todo: xu li enemy khi va cham voi cac entity khac

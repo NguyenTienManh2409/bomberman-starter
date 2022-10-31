@@ -41,6 +41,7 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
     private Camera camera;
+    public static Bomber bomberman;
 
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
@@ -98,6 +99,8 @@ public class BombermanGame extends Application {
                             stage.show();
                             MainMenu.PLAY = false;
                             running[0] = true;
+                            MapCreate.clearAll();
+                            MapCreate.initMap();
                         }
                         if (MainMenu.ABOUT) {
                             stage.setScene(aboutOptionScene);
@@ -140,12 +143,40 @@ public class BombermanGame extends Application {
                     scene.addEventHandler(KeyEvent.KEY_PRESSED, Keyboard::setInputKeyEvent1);
                     scene.addEventHandler(KeyEvent.KEY_RELEASED, Keyboard::setInputKeyEvent2);
                     scene.setOnKeyPressed(keyEvent -> {
-                        if(keyEvent.getCode() == KeyCode.SPACE && Bomber.NUMBER_OF_BOMBS != 0){
-                            createBomb();
-                            sound.getPutBomSound();
+                        switch (keyEvent.getCode()) {
+                            case SPACE:
+                                if (Bomber.NUMBER_OF_BOMBS != 0) {
+                                    createBomb();
+                                    sound.getPutBomSound();
+                                }
+                                break;
+                            case L:
+                                // ToDo: Test kill enemy
+                                for (Entity entity : entities) {
+                                    if (entity instanceof Enemy) {
+                                        ((Enemy) entity).kill();
+                                        break;
+                                    }
+                                }
+                                break;
+                            case K:
+                                // ToDo: Test kill player
+                                bomberman.kill();
+                                break;
+                            case N:
+                                // TODO: Test next level
+                                MapCreate.nextMap();
+                                break;
                         }
                     });
-
+                    if (Bomber.losegame) {
+                        running[0] = false;
+                        stage.setScene(loseMenuScene);
+                    }
+                    if (MapCreate.gameLevel == 4) {
+                        running[0] = false;
+                        stage.setScene(winMenuScene);
+                    }
                     try {
                         update();
                     } catch (IOException | ConcurrentModificationException | UnsupportedAudioFileException |
@@ -158,7 +189,7 @@ public class BombermanGame extends Application {
         };
         timer.start();
         MapCreate.createMap(MapCreate.getGameLevel());
-        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
     }
 
@@ -208,7 +239,6 @@ public class BombermanGame extends Application {
                             if (cur instanceof Bomber) {
                                 if (Collision.checkVaCham(cur, flame)) {
                                     ((Bomber) cur).kill();
-                                    sound.getPlayerDeadSound();
                                 }
                             }
                         }
@@ -304,7 +334,6 @@ public class BombermanGame extends Application {
             boolean canNextGame = false;
             if (!LayeredEntity.isEmpty()) {
                 for (Integer value : getLayeredEntitySet()) {
-
                     if (LayeredEntity.get(value).peek() instanceof Portal
                             && Collision.checkVaCham(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
                         canNextGame = true;
@@ -314,11 +343,11 @@ public class BombermanGame extends Application {
             }
             // xu li khi qua man
             if (canNextGame) {
-                sound.getNextLevelSound();
                 MapCreate.nextMap();
             }
         }
     }
+
 
     // ToDo: tra ve bomber
     public static Bomber getPlayer() {

@@ -25,7 +25,7 @@ public class Bomber extends Entity {
     protected static boolean alive = true;
     protected int timeToDisapear = 0;
     protected boolean destroyed = false;
-    protected int lives = 3;
+    public static int lives = 3;
     public static boolean losegame = false;
     public static List<Bomb> bombList = new ArrayList<Bomb>();
     public static int NUMBER_OF_BOMBS = 2;
@@ -42,14 +42,15 @@ public class Bomber extends Entity {
     @Override
     public void update() {
         if (!isAlive()) {
-            sound.getEnemyDeadSound();
             afterKill();
             if (this.isDestroyed()) {
                 if (lives > 0) {
+                    lives--;
                     resetBomber();
+                    System.out.print(lives);
                 } else
                 {
-
+                    losegame = true;
                 }
             }
         }
@@ -58,7 +59,8 @@ public class Bomber extends Entity {
     }
 
     public void kill() {
-        alive = false;
+        setAlive(false);
+        sound.getEnemyDeadSound();
     }
 
     public void afterKill() {
@@ -67,7 +69,6 @@ public class Bomber extends Entity {
             if (timeToDisapear == Bomb.TIME_TO_DISAPPEAR) {
                 timeToDisapear = 0;
                 destroyed = true;
-                lives--;
             }
         }
     }
@@ -150,8 +151,8 @@ public class Bomber extends Entity {
         return alive;
     }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
+    public static void setAlive(boolean alive) {
+        Bomber.alive = alive;
     }
 
     public boolean isDestroyed() {

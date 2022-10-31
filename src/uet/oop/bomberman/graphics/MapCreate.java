@@ -12,6 +12,7 @@ import uet.oop.bomberman.entities.Enemy.Oneal;
 import uet.oop.bomberman.entities.item.BombItem;
 import uet.oop.bomberman.entities.item.FlameItem;
 import uet.oop.bomberman.entities.item.SpeedItem;
+import uet.oop.bomberman.sound.Sound;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class MapCreate extends BombermanGame {
     private static char[][] map;
     private static int row;
     private static int col;
-
+    private static Sound sound = new Sound();
     public static int getCol() {
         return col;
     }
@@ -45,6 +46,7 @@ public class MapCreate extends BombermanGame {
         createMap(getGameLevel());
     }
 
+    // Todo: clear map khi bomber chet
     public static void clear() {
         BombermanGame.entities.clear();
         BombermanGame.stillObjects.clear();
@@ -53,10 +55,24 @@ public class MapCreate extends BombermanGame {
         map = new char[getCol()][getRow()];
     }
 
+    // Todo: clear map khi win game va lose game
+    public static void clearAll() {
+        BombermanGame.entities.clear();
+        BombermanGame.stillObjects.clear();
+        BombermanGame.LayeredEntity.clear();
+        Bomber.bombList.clear();
+        Bomber.lives = 3;
+        Bomber.setAlive(true);
+        Bomber.losegame = false;
+        gameLevel = 1;
+        map = new char[getCol()][getRow()];
+    }
+
     public static void nextMap() {
         clear();
         gameLevel++;
         initMap();
+        sound.getNextLevelSound();
     }
     public static void createMap(int gameLevel) {
         fileLoad(gameLevel);
