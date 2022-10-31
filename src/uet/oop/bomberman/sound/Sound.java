@@ -14,14 +14,11 @@ public class Sound {
     private AudioFormat format;
     private Clip clip;
 
-    private Map<String, String> listFile;
-
     public Sound() {
 
     }
-    /**
-     * @param filename the name of the file that is going to be played
-     */
+
+    // lay am thanh de play Sound
     private void playSound(String filename){
         try {
             file = new File(filename);
@@ -36,6 +33,7 @@ public class Sound {
 
     }
 
+    // lay cac sound effect
     public void getBgSound() {
         playSound("res/sound/soundtrack.wav");
     }

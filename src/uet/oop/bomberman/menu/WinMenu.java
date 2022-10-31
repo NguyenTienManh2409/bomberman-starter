@@ -59,6 +59,7 @@ public class WinMenu extends Menu {
         return winMenuScene;
     }
 
+    // Xu ly vs chuot va nut
     private static void backHandle(MouseEvent event, Text text) {
         if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
             text.setStyle("-fx-font-size:60");

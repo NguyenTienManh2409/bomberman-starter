@@ -29,7 +29,6 @@ public class MainMenu extends Menu {
     public static boolean ABOUT = false;
 
     @Override
-
     public Scene create(){
         VBox vb = initVBox();
         vb.setAlignment(Pos.CENTER);
@@ -73,6 +72,7 @@ public class MainMenu extends Menu {
         return menuScene;
     }
 
+    // Xu ly vs chuot va nut
     private static void aboutHandle(MouseEvent event, Text text) {
         if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
             text.setStyle("-fx-font-size:60");

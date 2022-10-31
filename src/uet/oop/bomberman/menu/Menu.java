@@ -22,6 +22,7 @@ import static uet.oop.bomberman.BombermanGame.WIDTH;
 public abstract class Menu {
     protected abstract Scene create();
 
+    // tao background
     protected static BackgroundImage createImage(String url) {
         return new BackgroundImage(
                 new Image(url),
@@ -31,6 +32,8 @@ public abstract class Menu {
                 new BackgroundSize(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT, true, true, false, true));
 
     }
+
+    // tao Text de  hien
     protected void customText(Text text) {
         DropShadow ds = new DropShadow();
         ds.setOffsetY(3.0f);
@@ -55,6 +58,7 @@ public abstract class Menu {
         text.setEffect(r);
     }
 
+    // Tao Virtual Box de hien chu va lay background
     protected VBox initVBox() {
         VBox vb = new VBox();
         vb.setAlignment(Pos.CENTER);
