@@ -22,7 +22,7 @@ public class Bomb extends Entity {
     protected int x1_temp, x2_temp, y1_temp, y2_temp;
     protected final int pixel = 1;
     private Sound sound = new Sound();
-    public static List<Flame> flameList = new ArrayList<>();
+    private final List<Flame> flameList = new ArrayList<>();
 
     public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
