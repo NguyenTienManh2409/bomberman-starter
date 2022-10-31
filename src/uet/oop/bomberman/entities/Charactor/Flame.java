@@ -14,13 +14,6 @@ public class Flame extends Entity {
         super(xUnit, yUnit, img);
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
     public void render(GraphicsContext gc) {
         chooseSprite();
         super.render(gc);
@@ -111,6 +104,14 @@ public class Flame extends Entity {
     @Override
     public boolean collide(Entity e) {
         return false;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

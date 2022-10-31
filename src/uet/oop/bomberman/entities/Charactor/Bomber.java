@@ -9,6 +9,7 @@ import uet.oop.bomberman.entities.Enemy.Enemy;
 import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.sound.Sound;
 
 import java.awt.*;
 import java.io.IOException;
@@ -27,11 +28,13 @@ public class Bomber extends Entity {
     protected boolean destroyed = false;
     public int lives = 3;
     public static List<Bomb> bombList = new ArrayList<Bomb>();
-    public static int NUMBER_OF_BOMBS = 1;
+    public static int NUMBER_OF_BOMBS = 2;
+    private Sound sound = new Sound();
 
     public Bomber(double x, double y, Image img) {
         super(x, y, img);
     }
+
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
         for (Bomb bomb : bombList) { bomb.render(gc);}
@@ -39,9 +42,15 @@ public class Bomber extends Entity {
     @Override
     public void update() {
         if (!isAlive()) {
+            sound.getEnemyDeadSound();
             afterKill();
             if (this.isDestroyed()) {
-                resetBomber();
+                if (lives > 0) {
+                    resetBomber();
+                } else
+                {
+                    //dua ra menu thua
+                }
             }
         }
         calculateMove();
@@ -55,12 +64,10 @@ public class Bomber extends Entity {
     public void afterKill() {
         if (!destroyed) {
             timeToDisapear++;
-            if (timeToDisapear < Bomb.TIME_TO_DISAPPEAR) {
-                exploding = true;
-            } else {
-                exploding = false;
+            if (timeToDisapear == Bomb.TIME_TO_DISAPPEAR) {
                 timeToDisapear = 0;
                 destroyed = true;
+                lives--;
             }
         }
     }
@@ -72,6 +79,7 @@ public class Bomber extends Entity {
         setAlive(true);
     }
 
+    // ToDo: xu li di chuyen cua bomber va choose sprite
     private void calculateMove() {
         if (isAlive()) {
             animate++;
@@ -97,7 +105,7 @@ public class Bomber extends Entity {
         }
     }
 
-
+    // Todo: kiem tra va cham cua bomber voi cac entity khac
     public void checkCollision() {
         for (Entity entity : BombermanGame.stillObjects) {
             boolean check = this.collide(entity);
@@ -112,6 +120,7 @@ public class Bomber extends Entity {
         }
     }
 
+    // Todo: khong cho bomber di chuyen khi gap vat can
     public void caculateCollision(Entity other, boolean check) {
         double _x = (x + width / 2) - (other.getX() + other.width / 2) - 5;
         double _y = (y + height / 2) - (other.getY() + other.height / 2) + 4;
@@ -149,7 +158,4 @@ public class Bomber extends Entity {
         return destroyed;
     }
 
-    public static List<Bomb> getBombList() {
-        return bombList;
-    }
 }

@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.Enemy;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.Collision.Collision;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.Charactor.Bomb;
 import uet.oop.bomberman.entities.Charactor.Bomber;
@@ -32,21 +33,13 @@ public abstract class Enemy extends Entity {
         this.speed = speed;
     }
 
-    public boolean isFlamePass() {
-        return flamePass;
-    }
-
     public void kill() {
         isAlive = false;
     }
 
-    public void afterKill() {
-
-    }
-
+    // Todo: xu li enemy khi va cham voi cac entity khac
     protected void randomMove() {
         if (!isAlive) {
-            System.out.println("Enemy Die");
             return;
         } else {
             step++;
@@ -56,7 +49,7 @@ public abstract class Enemy extends Entity {
                         if (!(entity instanceof Bomber || entity instanceof Enemy)) {
                             if (EnemyUp(entity)) return;
                         } else if (entity instanceof Bomber) {
-                            if (entity.intersectDown(this)) {
+                            if (Collision.checkVaCham(this,entity)) {
                                 ((Bomber) entity).kill();
                             }
                         }
@@ -102,7 +95,7 @@ public abstract class Enemy extends Entity {
                         if (!(entity instanceof Bomber || entity instanceof Enemy)) {
                             if (EnemyRight(entity)) return;
                         } else if (entity instanceof Bomber) {
-                            if (entity.intersectLeft(this)) {
+                            if (Collision.checkVaCham(this,entity)) {
                                 ((Bomber) entity).kill();
                             }
                         }
@@ -148,7 +141,7 @@ public abstract class Enemy extends Entity {
                         if (!(entity instanceof Bomber || entity instanceof Enemy)) {
                             if (EnemyDown(entity)) return;
                         } else if (entity instanceof Bomber) {
-                            if (entity.intersectUp(this)) {
+                            if (Collision.checkVaCham(this,entity)) {
                                 ((Bomber) entity).kill();
                             }
                         }
@@ -194,7 +187,7 @@ public abstract class Enemy extends Entity {
                         if (!(entity instanceof Bomber || entity instanceof Enemy)) {
                             if (EnemyLeft(entity)) return;
                         } else if (entity instanceof Bomber) {
-                            if (entity.intersectRight(this)) {
+                            if (Collision.checkVaCham(this,entity)) {
                                 ((Bomber) entity).kill();
                             }
                         }
@@ -239,6 +232,7 @@ public abstract class Enemy extends Entity {
         }
     }
 
+    // Todo: di chuyen sang trai neu khong co vat can
     private boolean EnemyLeft(Entity entity) {
         if (entity.intersectRight(this)) {
             if (entity.getMaxY() - getY() <= allowDistance) {
@@ -253,6 +247,7 @@ public abstract class Enemy extends Entity {
         return false;
     }
 
+    // Todo: di chuyen len tren neu khong co vat can
     private boolean EnemyUp(Entity entity) {
         if (entity.intersectDown(this)) {
             if (entity.getMaxX() - getX() <= allowDistance) {
@@ -267,6 +262,7 @@ public abstract class Enemy extends Entity {
         return false;
     }
 
+    // Todo: di chuyen xuong duoi neu khong co vat can
     private boolean EnemyDown(Entity entity) {
         if (entity.intersectUp(this)) {
             if (getMaxX() - entity.getX() <= allowDistance + 10) {
@@ -281,6 +277,7 @@ public abstract class Enemy extends Entity {
         return false;
     }
 
+    // Todo: di chuyen sang phai neu khong co vat can
     private boolean EnemyRight(Entity entity) {
         if (entity.intersectLeft(this)) {
             if (getMaxY() - entity.getY() <= allowDistance) {
@@ -299,13 +296,5 @@ public abstract class Enemy extends Entity {
 
     @Override
     public void update() {
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
-
-    public boolean isAlive() {
-        return isAlive;
     }
 }

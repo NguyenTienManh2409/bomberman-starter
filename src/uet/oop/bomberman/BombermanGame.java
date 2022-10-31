@@ -30,7 +30,6 @@ import uet.oop.bomberman.sound.Sound;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -45,9 +44,6 @@ public class BombermanGame extends Application {
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static Map<Integer, Stack<Entity>> LayeredEntity = new HashMap<>();
-    public static Bomber bomberman;
-    private String path = "res/levels/Level1.txt";
-
     private final MainMenu mainMenu = new MainMenu();
     private final AboutOption aboutOption = new AboutOption();
 
@@ -60,7 +56,7 @@ public class BombermanGame extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+    public void start(Stage stage) {
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT );
         gc = canvas.getGraphicsContext2D();
@@ -133,6 +129,7 @@ public class BombermanGame extends Application {
                     scene.setOnKeyPressed(keyEvent -> {
                         if(keyEvent.getCode() == KeyCode.SPACE && Bomber.NUMBER_OF_BOMBS != 0){
                             createBomb();
+                            sound.getPutBomSound();
                         }
                     });
 
@@ -148,7 +145,7 @@ public class BombermanGame extends Application {
         };
         timer.start();
         MapCreate.createMap(MapCreate.getGameLevel());
-        bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
     }
 
@@ -158,7 +155,7 @@ public class BombermanGame extends Application {
         bombUpdate();
         itemUpdate();
         portalUpdate();
-        camera.tick(Objects.requireNonNull(getPlayer()));
+        camera.Move(Objects.requireNonNull(getPlayer()));
     }
 
     public void render() {
@@ -174,7 +171,8 @@ public class BombermanGame extends Application {
         gc.translate(camera.getX(), 0);
     }
 
-    private void bombUpdate() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+    //Todo: xu li bom
+    private void bombUpdate() {
         Iterator<Bomb> bombIterator = Bomber.bombList.iterator();
         while (bombIterator.hasNext()) {
             Bomb bomb = bombIterator.next();
@@ -184,7 +182,7 @@ public class BombermanGame extends Application {
                     for (int i = 0; i < bomb.getFlameList().size(); i++) {
                         Flame flame = bomb.getFlameList().get(i);
                         flame.update();
-                        //Kiểm tra và xử lí nếu flame chạm vào người chơi hoặc quái.
+                        // xu li bom khi va cham voi enemy hoac bomber
                         Iterator<Entity> itr = BombermanGame.entities.iterator();
                         Entity cur;
                         while (itr.hasNext()) {
@@ -201,7 +199,7 @@ public class BombermanGame extends Application {
                                 }
                             }
                         }
-                        //Kiểm tra và xử lí nếu flame chạm vào brick không.
+                        // xu li bom khi va cham voi brick
                         int xFlame = (int) (flame.getX() / Sprite.SCALED_SIZE);
                         int yFlame = (int) (flame.getY() / Sprite.SCALED_SIZE);
                         if (BombermanGame.LayeredEntity.containsKey(BombermanGame.generateKey(xFlame, yFlame))) {
@@ -215,15 +213,24 @@ public class BombermanGame extends Application {
                                 }
                             }
                         }
+                        // xu li khi va cham voi bomb khac
+                        for (Bomb b1 : Bomber.bombList) {
+                            if (Collision.checkVaCham(b1,flame) && b1 != bomb){
+                                b1.set_timeToExplode(Bomb.TIME_TO_EXPLOSION_BOMB - 2);
+                            }
+                        }
+
                     }
                 }
-                if (bomb.isDestroyed()) {// && NUMBER_OF_BOMBS < 1) {
+                if (bomb.isDestroyed()) {
                     Bomber.NUMBER_OF_BOMBS++;
                     bombIterator.remove();
                 }
             }
         }
     }
+
+    //Todo: tao bom tai vi tri hien tai cua bomber
     public static void createBomb() {
         int tmpX = (int) ((BombermanGame.getPlayer().getX() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE);
         int tmpY = (int) ((BombermanGame.getPlayer().getY() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE);
@@ -231,34 +238,45 @@ public class BombermanGame extends Application {
         Bomber.bombList.add(bomb);
         Bomber.NUMBER_OF_BOMBS--;
     }
+
+    //ToDo: xu li khi bomber va cham item
     private void itemUpdate() {
         if (!LayeredEntity.isEmpty()) {
             for (Integer value : getLayeredEntitySet()) {
+                // xu li bomber va cham flameItem
                 if (LayeredEntity.get(value).peek() instanceof FlameItem
                         && Collision.checkVaCham(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
                     Bomb.LENGTH_OF_FLAME++;
                     LayeredEntity.get(value).pop();
+                    sound.getItemSound();
                     FlameItem.timeItem = 0;
                     FlameItem.isPickUp = true;
                 }
+                // xu li bomber va cham speedItem
                 if (LayeredEntity.get(value).peek() instanceof SpeedItem
                         && Collision.checkVaCham(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
                     LayeredEntity.get(value).pop();
                     Bomber.setSpeed(3);
+                    sound.getItemSound();
                     SpeedItem.timeItem = 0;
                     SpeedItem.isPickUp = true;
                 }
+                // xu li khi bomber va cham bombItem
                 if (LayeredEntity.get(value).peek() instanceof BombItem
                         && Collision.checkVaCham(Objects.requireNonNull(getPlayer()), LayeredEntity.get(value).peek())) {
                     LayeredEntity.get(value).pop();
                     Bomber.NUMBER_OF_BOMBS++;
+                    sound.getItemSound();
                     BombItem.timeItem = 0;
                     BombItem.isPickUp = true;
                 }
             }
         }
     }
+
+    //Todo: xu li khi bomber di qua cong dich chuyen
     private void portalUpdate() {
+        // dem so luong enemy
         int count_enemy = 0;
         Iterator<Entity> itr = entities.iterator();
         while (itr.hasNext()) {
@@ -268,6 +286,7 @@ public class BombermanGame extends Application {
             }
         }
 
+        // xu li khi nguoi choi co the qua man
         if (count_enemy == 0) {
             boolean canNextGame = false;
             if (!LayeredEntity.isEmpty()) {
@@ -280,15 +299,15 @@ public class BombermanGame extends Application {
                     }
                 }
             }
+            // xu li khi qua man
             if (canNextGame) {
-                MapCreate.setGameLevel(MapCreate.getGameLevel() + 1);
-                MapCreate.clear();
-                MapCreate.initMap();
+                sound.getNextLevelSound();
+                MapCreate.nextMap();
             }
         }
     }
 
-
+    // ToDo: tra ve bomber
     public static Bomber getPlayer() {
         Iterator<Entity> itr = entities.iterator();
 
@@ -303,6 +322,7 @@ public class BombermanGame extends Application {
         return null;
     }
 
+    // ToDo: tao key cho bang bam LayereEntity
     public static int generateKey(int x, int y) {
         return x * 100 + y;
     }

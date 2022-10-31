@@ -15,7 +15,6 @@ public class SpeedItem extends Item {
 	public void update() {
 
 	}
-
 	@Override
 	public boolean collide(Entity e) {
 		return false;

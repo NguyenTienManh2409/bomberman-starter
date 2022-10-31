@@ -16,6 +16,7 @@ public abstract class Entity {
     protected double y;
     public double width;
     public double height;
+
     protected Image img;
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
@@ -32,6 +33,7 @@ public abstract class Entity {
     }
 
     public abstract void update();
+
     public boolean intersectLeft(Entity other) {
         // TODO: Kiểm tra xem có vật giao nhau bên trái
         boolean impactX = (this.getX() == other.getMaxX());

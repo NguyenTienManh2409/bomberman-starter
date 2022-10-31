@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,15 +21,13 @@ public class Bomb extends Entity {
     private boolean _destroyed = false;
     protected int x1_temp, x2_temp, y1_temp, y2_temp;
     protected final int pixel = 1;
-
+    private Sound sound = new Sound();
     private final List<Flame> flameList = new ArrayList<>();
 
-    public List<Flame> getFlameList() {
-        return flameList;
-    }
     public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
+
     public void render(GraphicsContext gc) {
         img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, animate, 36).getFxImage();
         super.render(gc);
@@ -51,6 +50,8 @@ public class Bomb extends Entity {
             }
         }
     }
+
+    // ToDo: xu li bom khi nao no
     private void handleBomb() {
         if (!_destroyed) {
             _timeToExplode++;
@@ -61,6 +62,7 @@ public class Bomb extends Entity {
                 if (_timeToExplode == TIME_TO_EXPLOSION_BOMB) {
                     _exploding = true;
                     initAndHandleFlame();
+                    sound.getExplosionSound();
                 }
                 if (_timeToExplode < TIME_TO_EXPLOSION_BOMB + TIME_TO_DISAPPEAR) {
                     _exploding = true;
@@ -72,6 +74,7 @@ public class Bomb extends Entity {
         }
     }
 
+    // ToDo: tao flame
     private void initAndHandleFlame() {
         flameList.clear();
         Flame newFlame = null;
@@ -150,6 +153,7 @@ public class Bomb extends Entity {
         flameList.add(newFlame);
     }
 
+    // Todo: check va cham cua flame va tuong
     protected boolean rightable(double x_pos, double y_pos) {
         x1_temp = (int) ((y_pos + pixel) / Sprite.SCALED_SIZE);
         y1_temp = (int) ((x_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE);
@@ -161,6 +165,7 @@ public class Bomb extends Entity {
                 MapCreate.getMap()[x2_temp][y2_temp] != '#';
     }
 
+    // Todo: check va cham cua flame va tuong
     protected boolean downable(double x_pos, double y_pos) {
         x1_temp = (int) ((y_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE);
         y1_temp = (int) ((x_pos + pixel) / Sprite.SCALED_SIZE);
@@ -172,6 +177,7 @@ public class Bomb extends Entity {
                 MapCreate.getMap()[x2_temp][y2_temp] != '#';
     }
 
+    // Todo: check va cham cua flame va tuong
     protected boolean upable(double x_pos, double y_pos) {
         x1_temp = (int) ((y_pos - pixel) / Sprite.SCALED_SIZE);
         y1_temp = (int) ((x_pos + pixel) / Sprite.SCALED_SIZE);
@@ -183,6 +189,7 @@ public class Bomb extends Entity {
                 MapCreate.getMap()[x2_temp][y2_temp] != '#';
     }
 
+    // Todo: check va cham cua flame va tuong
     protected boolean leftable(double x_pos, double y_pos) {
         x1_temp = (int) ((y_pos + pixel) / Sprite.SCALED_SIZE);
         y1_temp = (int) ((x_pos - pixel) / Sprite.SCALED_SIZE);
@@ -194,6 +201,10 @@ public class Bomb extends Entity {
                 MapCreate.getMap()[x2_temp][y2_temp] != '#';
     }
 
+    public List<Flame> getFlameList() {
+        return flameList;
+    }
+
     public boolean isDestroyed() {
         return _destroyed;
     }
@@ -201,6 +212,15 @@ public class Bomb extends Entity {
     public boolean isExploding() {
         return _exploding;
     }
+
+    public void set_exploding(boolean _exploding) {
+        this._exploding = _exploding;
+    }
+
+    public void set_timeToExplode(long _timeToExplode) {
+        this._timeToExplode = _timeToExplode;
+    }
+
     @Override
     public boolean collide(Entity e) {
         return false;

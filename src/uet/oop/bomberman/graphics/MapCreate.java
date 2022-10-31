@@ -5,10 +5,10 @@ import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.Charactor.Bomb;
 import uet.oop.bomberman.entities.Charactor.Bomber;
 import uet.oop.bomberman.entities.Enemy.*;
-import uet.oop.bomberman.entities.Enemy.AI.Doll;
-import uet.oop.bomberman.entities.Enemy.AI.Kondoria;
-import uet.oop.bomberman.entities.Enemy.AI.Minvo;
-import uet.oop.bomberman.entities.Enemy.AI.Oneal;
+import uet.oop.bomberman.entities.Enemy.Doll;
+import uet.oop.bomberman.entities.Enemy.Kondoria;
+import uet.oop.bomberman.entities.Enemy.Minvo;
+import uet.oop.bomberman.entities.Enemy.Oneal;
 import uet.oop.bomberman.entities.item.BombItem;
 import uet.oop.bomberman.entities.item.FlameItem;
 import uet.oop.bomberman.entities.item.SpeedItem;
@@ -37,7 +37,6 @@ public class MapCreate extends BombermanGame {
         BombermanGame.entities = new ArrayList<>();
         BombermanGame.stillObjects = new ArrayList<>();
         BombermanGame.LayeredEntity = new HashMap<>();
-        Bomber.bombList = new ArrayList<>();
         Bomber.NUMBER_OF_BOMBS = 1;
         Bomb.LENGTH_OF_FLAME = 1;
         Bomber.setSpeed(2);
@@ -50,7 +49,6 @@ public class MapCreate extends BombermanGame {
         BombermanGame.entities.clear();
         BombermanGame.stillObjects.clear();
         BombermanGame.LayeredEntity.clear();
-        Bomber.bombList.clear();
         map = new char[getCol()][getRow()];
     }
 
@@ -149,7 +147,6 @@ public class MapCreate extends BombermanGame {
 
     public static void fileLoad(int gameLevel) {
         try {
-
             String path = String.format("res/levels/Level" + gameLevel + ".txt");
             FileInputStream reader = new FileInputStream(path);
             Scanner scanner = new Scanner(reader);
@@ -176,10 +173,6 @@ public class MapCreate extends BombermanGame {
 
     public static int getGameLevel() {
         return gameLevel;
-    }
-
-    public static void setGameLevel(int gameLevel) {
-        MapCreate.gameLevel = gameLevel;
     }
 
     public static char[][] getMap() {

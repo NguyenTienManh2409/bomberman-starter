@@ -4,6 +4,9 @@ package uet.oop.bomberman.entities.Enemy.AI;
 import uet.oop.bomberman.entities.Charactor.Bomber;
 import uet.oop.bomberman.entities.Enemy.Enemy;
 
+/**
+ * Enemy se tim vi tri cua bomber roi di chuyen den
+ */
 public class AIHigh extends AI{
     Bomber player;
     Enemy enemy;

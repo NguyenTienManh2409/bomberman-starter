@@ -1,17 +1,17 @@
-package uet.oop.bomberman.entities.Enemy.AI;
+package uet.oop.bomberman.entities.Enemy;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.entities.Enemy.AI.AIHigh;
 import uet.oop.bomberman.entities.Enemy.Enemy;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Kondoria extends Enemy {
-    public Kondoria(int xUnit, int yUnit, Image img) {
-        super(xUnit, yUnit, img, 1);
+public class Oneal extends Enemy {
+    public Oneal(int xUnit, int yUnit, Image img) {
+        super(xUnit, yUnit, img, 2);
         ai = new AIHigh(BombermanGame.getPlayer(), this);
         direction = ai.calculateDirection();
-        wallPass = true;
         maxStep = 30;
     }
 
@@ -20,25 +20,25 @@ public class Kondoria extends Enemy {
         switch (step % 30) {
             case 0: {
                 if (direction == 0 || direction == 1) {
-                    img = Sprite.kondoria_right1.getFxImage();
+                    img = Sprite.oneal_right1.getFxImage();
                 } else {
-                    img = Sprite.kondoria_left1.getFxImage();
+                    img = Sprite.oneal_left1.getFxImage();
                 }
                 break;
             }
             case 10: {
                 if (direction == 0 || direction == 1) {
-                    img = Sprite.kondoria_right2.getFxImage();
+                    img = Sprite.oneal_right2.getFxImage();
                 } else {
-                    img = Sprite.kondoria_left2.getFxImage();
+                    img = Sprite.oneal_left2.getFxImage();
                 }
                 break;
             }
             case 20: {
                 if (direction == 0 || direction == 1) {
-                    img = Sprite.kondoria_right3.getFxImage();
+                    img = Sprite.oneal_right3.getFxImage();
                 } else {
-                    img = Sprite.kondoria_left3.getFxImage();
+                    img = Sprite.oneal_left3.getFxImage();
                 }
                 break;
             }
@@ -50,11 +50,12 @@ public class Kondoria extends Enemy {
         if (isAlive) {
             randomMove();
             chooseSprite();
-        } else {
+        }
+        else {
             if (frameToDisappear > 0) {
                 switch (frameToDisappear) {
                     case 36: {
-                        img = Sprite.kondoria_dead.getFxImage();
+                        img = Sprite.oneal_dead.getFxImage();
                         break;
                     }
                     case 24: {

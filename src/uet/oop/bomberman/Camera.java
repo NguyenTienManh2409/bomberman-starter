@@ -1,6 +1,5 @@
 package uet.oop.bomberman;
 
-import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -15,7 +14,7 @@ public class Camera {
         this.y = y;
     }
 
-    public void tick(Entity entity) {
+    public void Move(Entity entity) {
         x += ((entity.getX() - x) - BombermanGame.WIDTH * Sprite.SCALED_SIZE / 2);
         if (x <= 0) x = 0;
         if (x >= (BombermanGame.WIDTH) * Sprite.SCALED_SIZE) x = (BombermanGame.WIDTH ) * Sprite.SCALED_SIZE;
