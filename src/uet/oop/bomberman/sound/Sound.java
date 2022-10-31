@@ -15,13 +15,9 @@ public class Sound {
     private Clip clip;
 
     private Map<String, String> listFile;
-    private String[] files = {"background", "put_bomb","explosion","enemy_dead", "player_dead","next_level","get_item"};
 
     public Sound() {
-        listFile = new HashMap<>();
-        for (String file : files) {
-            listFile.put(file, "res/sound/" + file + ".wav");
-        }
+
     }
     /**
      * @param filename the name of the file that is going to be played
@@ -37,30 +33,34 @@ public class Sound {
     }
 
     public void getBgSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound(listFile.get("background"));
+        playSound("res/sound/soundtrack.wav");
     }
 
     public void getPutBomSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound(listFile.get("put_bomb"));
+        playSound("res/sound/putbomb.wav");
     }
 
     public void getExplosionSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound(listFile.get("explosion"));
+        playSound("res/sound/explosion.wav");
     }
 
     public void getEnemyDeadSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound(listFile.get("enemy_dead"));
+        playSound("res/sound/enemy_dead.wav");
     }
 
     public void getPlayerDeadSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound(listFile.get("player_dead"));
+        playSound("res/sound/player_dead.wav");
     }
 
     public void getNextLevelSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound(listFile.get("next_level"));
+        playSound("res/sound/next_level.wav");
     }
 
     public void getItemSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        playSound(listFile.get("get_item"));
+        playSound("res/sound/get_item.wav");
+    }
+
+    public void getBgLoseSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        playSound("res/sound/end_game_lose.wav");
     }
 }

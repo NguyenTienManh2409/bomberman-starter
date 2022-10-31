@@ -4,16 +4,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Reflection;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import uet.oop.bomberman.graphics.Sprite;
@@ -65,7 +57,7 @@ public class AboutOption extends Menu{
         {
             public void handle(MouseEvent event)
             {
-                playHandle(event, backText);
+                backHandle(event, backText);
             }
         };
 
@@ -78,7 +70,7 @@ public class AboutOption extends Menu{
     }
 
 
-    private static void playHandle(MouseEvent event, Text text) {
+    private static void backHandle(MouseEvent event, Text text) {
         if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
             text.setStyle("-fx-font-size:60");
         }else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET){

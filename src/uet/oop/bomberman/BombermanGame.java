@@ -24,6 +24,7 @@ import uet.oop.bomberman.graphics.MapCreate;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.Control.Keyboard;
 import uet.oop.bomberman.menu.AboutOption;
+import uet.oop.bomberman.menu.LoseMenu;
 import uet.oop.bomberman.menu.MainMenu;
 import uet.oop.bomberman.sound.Sound;
 
@@ -50,6 +51,8 @@ public class BombermanGame extends Application {
     private final MainMenu mainMenu = new MainMenu();
     private final AboutOption aboutOption = new AboutOption();
 
+    private final LoseMenu loseMenu = new LoseMenu();
+
     private Sound sound = new Sound();
 
     public static void main(String[] args) {
@@ -72,6 +75,7 @@ public class BombermanGame extends Application {
 
         Scene mainMenuScene = mainMenu.create();
         Scene aboutOptionScene = aboutOption.create();
+        Scene loseMenuScene =  loseMenu.create();
 
         camera = new Camera(0, 0);
 
@@ -109,6 +113,16 @@ public class BombermanGame extends Application {
                             stage.setScene(mainMenuScene);
                             AboutOption.ABOUT_BACK = false;
                             MainMenu.ABOUT = false;
+                        }
+                    }
+                });
+
+                loseMenuScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        if (LoseMenu.LOSE_BACK) {
+                            stage.setScene(mainMenuScene);
+                            LoseMenu.LOSE_BACK = false;
                         }
                     }
                 });
