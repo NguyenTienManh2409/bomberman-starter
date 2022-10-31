@@ -28,7 +28,6 @@ public class LoseMenu extends Menu {
         vb.setAlignment(Pos.BOTTOM_CENTER);
         vb.setPadding(new Insets(30));
         vb.setSpacing(30);
-        vb.setBackground(new Background(createImage("file:res/BG.png")));
         vb.setBackground(new Background(createImage("file:res/BG_lose.png")));
 
         Text backText = new Text("Back");

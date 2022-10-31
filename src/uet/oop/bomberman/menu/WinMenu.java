@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -13,11 +14,10 @@ import uet.oop.bomberman.graphics.Sprite;
 import static uet.oop.bomberman.BombermanGame.HEIGHT;
 import static uet.oop.bomberman.BombermanGame.WIDTH;
 
-public class AboutOption extends Menu{
+public class WinMenu extends Menu {
+    public static boolean WIN_BACK = false;
 
-    public static boolean ABOUT_BACK = false;
-
-    public AboutOption() {
+    public WinMenu() {
         create();
     }
 
@@ -26,32 +26,24 @@ public class AboutOption extends Menu{
 
         VBox vb = initVBox();
         vb.setAlignment(Pos.BOTTOM_CENTER);
+        vb.setPadding(new Insets(30));
+        vb.setSpacing(30);
+        vb.setBackground(new Background(createImage("file:res/BG_win.png")));
 
         Text backText = new Text("Back");
 
-        String str =  " Bomberman Game\n"
-                + "\n"
-                + " Members: \n"
-                + " - Nguyen Tien Manh\n"
-                + " - Nguyen Khac Nam Huy\n";
         TextFlow area = new TextFlow();
 
-        Text info = new Text(str);
-
         customText(backText);
-        customText(info);
-        info.setStyle("-fx-font-size:35");
-        info.setEffect(null);
 
-        area.getChildren().add(info);
         vb.getChildren().add(area);
         vb.getChildren().add(backText);
-        VBox.setMargin(area, new Insets(10, 100, 50, 100));
+        VBox.setMargin(area, new Insets(10, 200, 50, 250));
         vb.setFillWidth(true);
 
-        Scene aboutOptionScene = new Scene(vb, Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
+        Scene winMenuScene = new Scene(vb, Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
 
-        EventHandler<MouseEvent> playHandle = new EventHandler<MouseEvent>()
+        EventHandler<MouseEvent> backHandle = new EventHandler<MouseEvent>()
         {
             public void handle(MouseEvent event)
             {
@@ -60,13 +52,12 @@ public class AboutOption extends Menu{
         };
 
 
-        backText.addEventFilter(MouseEvent.MOUSE_ENTERED, playHandle);
-        backText.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET, playHandle);
-        backText.addEventFilter(MouseEvent.MOUSE_PRESSED, playHandle);
+        backText.addEventFilter(MouseEvent.MOUSE_ENTERED, backHandle);
+        backText.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET, backHandle);
+        backText.addEventFilter(MouseEvent.MOUSE_PRESSED, backHandle);
 
-        return aboutOptionScene;
+        return winMenuScene;
     }
-
 
     private static void backHandle(MouseEvent event, Text text) {
         if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
@@ -75,11 +66,10 @@ public class AboutOption extends Menu{
             text.setStyle("-fx-font-size:45");
         }else if (event.getEventType() == MouseEvent.MOUSE_PRESSED){
 //			System.out.println("chon");
-            ABOUT_BACK = true;
+            WIN_BACK = true;
             text.setStyle("-fx-font-size:45");
         }else {
             text.setStyle("-fx-font-size:45");
         }
     }
 }
-
