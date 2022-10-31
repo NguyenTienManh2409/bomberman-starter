@@ -23,10 +23,10 @@ public class Bomber extends Entity {
     private int animate = 0;
     private static int speed = 2;
     protected static boolean alive = true;
-    protected boolean exploding = false;
     protected int timeToDisapear = 0;
     protected boolean destroyed = false;
-    public int lives = 3;
+    protected int lives = 3;
+    public static boolean losegame = false;
     public static List<Bomb> bombList = new ArrayList<Bomb>();
     public static int NUMBER_OF_BOMBS = 2;
     private Sound sound = new Sound();
@@ -49,7 +49,7 @@ public class Bomber extends Entity {
                     resetBomber();
                 } else
                 {
-                    //dua ra menu thua
+
                 }
             }
         }

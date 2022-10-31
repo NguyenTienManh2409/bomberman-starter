@@ -49,6 +49,7 @@ public class MapCreate extends BombermanGame {
         BombermanGame.entities.clear();
         BombermanGame.stillObjects.clear();
         BombermanGame.LayeredEntity.clear();
+        Bomb.flameList.clear();
         map = new char[getCol()][getRow()];
     }
 
