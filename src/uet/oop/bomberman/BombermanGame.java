@@ -180,7 +180,7 @@ public class BombermanGame extends Application {
                     try {
                         update();
                     } catch (IOException | ConcurrentModificationException | UnsupportedAudioFileException |
-                            LineUnavailableException ignored) {
+                            LineUnavailableException | NullPointerException ignored) {
 
                     }
                     render();
